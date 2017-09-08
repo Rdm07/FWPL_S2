@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load material_form %}
+{% load common %}
+
+
+{% block title %}
+FWPL Matchdays
+{% endblock %}
+
+{% block nav %}
+
+	<nav class="top-nav indigo darken-4">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a class="page-title" style="font-size: 30px;">
+                    FW PREDICTOR LEAGUE
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <a href="#" data-activates="slide-out"
+           class="button-collapse top-nav full hide-on-large-only">
+            <i class="material-icons">menu</i>
+        </a>
+    </div>
+
+    <ul class="side-nav fixed" id="slide-out">
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><div class="divider"></div></li>
+        <li><a href="{% url 'matchdays' m_count %}">Gameweeks</a></li>
+        <li><a href="{% url 'matchdayperformance' m_count %}">Gameweek Performance</a></li>
+        <li><a href="{% url 'leaguetable' %}">League Table</a></li>
+        <li><div class="divider"></div></li>
+        <li><a href="{% url 'logout' %}">Sign Out</a></li>
+    </ul>
+
+
+{% endblock %}
+
+{% block main %}
+
+<div class="row">
+	<div class="col s12 m12 center-align">
+	<h5><b>{{user.first_name}} {{user.last_name}}:</b></h5>
+
+<div class="row">
+	<div class="col s12 m12 center-align">
+	<h5>Gameweeks: </h5>
+		{% for n in m_all %}
+			{% if n.day == matchday.day %}
+				<a href="{% url 'matchdays_user' n.day user.id %}" class="btn waves-effect waves-light disabled">{{n.day}}</a>
+			{% else %}
+				<a href="{% url 'matchdays_user' n.day user.id %}" class="btn waves-effect waves-light">{{n.day}}</a>
+			{% endif %}
+		{% endfor %}
+	</div>
+</div>
+
+<div class="row">
+	<div class="col 2 m2 left-align">
+			{% if m_prv == 0 %}
+				<a href="{% url 'matchdays' m_prv %}" class="btn-flat waves-effect waves-light red disabled"><i class="large material-icons">skip_previous</i></a>
+			{% endif %}
+			{% if m_prv != 0 %}
+				<a href="{% url 'matchdays' m_prv %}" class="btn-flat waves-effect waves-light red"><i class="large material-icons">skip_previous</i></a>
+			{% endif %}
+	</div>
+	<div class="col 8 m8 center-align">
+		<h5><b>Gameweek {{matchday.day}}: {{matchday.start_date}} - {{matchday.end_date}}</b></h5>
+		<p>{% if matchday.deadline_passed == True %}Total Points: {{points}}{% endif %}</p>
+	</div>
+	<div class="col 2 m2 right-align">
+			{% if matchday.day == m_count %}
+				<a href="{% url 'matchdays' m_next %}" class="btn-flat waves-effect waves-light red disabled"><i class="large material-icons">skip_next</i></a>
+			{% endif %}
+			{% if matchday.day != m_count %}
+				<a href="{% url 'matchdays' m_next %}" class="btn-flat waves-effect waves-light red"><i class="large material-icons">skip_next</i></a>
+			{% endif %}
+	</div>
+</div>
+
+{% if matchday.deadline_passed == True %}
+<div class="row">
+	<div class="col 12 m12">
+		{% for q in q_list %}
+			<div class="card">
+				<div class="card-content">
+					<h5><b>Question {{q.q_number}}:</b></h5>
+					<h6>{{q.q_text}} {% if q.margin != 0 %}(Margin: {{q.margin}}){% endif %}</h6>
+					{% with n=q.q_number %}
+					{% for a in a_list %}
+						{% if a.for_question == q %}
+							{% if matchday.deadline_passed == True %}
+							<br>
+							<p><b>{{user.first_name}}'s Answer:</b> {{a.display}} {% if q.margin != 0 %}(Margin: {{q.margin}}) {% endif %} {% if a.bonus == True %}(<b>Bonus</b>) {% endif %}</p>
+							<p><b>Points:</b> {{a.points}}</p>
+							{% endif %}
+						{% endif %}
+					{% endfor %}
+					{% if exists|access:n == 0 %}
+						{% if matchday.deadline_passed == True %}
+						<br>
+						<p><b>Your Answer:</b> Did not Submit</p>
+						<p><b>Points:</b> 0</p>
+						{% endif %}
+					{% endif %}
+					{% if matchday.deadline_passed == True %}
+						{% for a in aset_list %}
+							{% if a.for_question == q %}
+								<p><b>Answer Key:</b> {{a.display}} {% if q.margin != 0 %}(Margin: {{q.margin}}) {% endif %}</p>
+							{% endif %}
+						{% endfor %}
+					{% endif %}
+					{% endwith %}
+				</div>
+			</div>
+		{% endfor %}
+	</li>
+</ul>
+{% endif %}
+
+{% if matchday.deadline_passed == False %}
+<div class="row">
+    <div class="col sl6 m12">
+        <div class="card">
+            <div class="card-content">
+                <h6><b>Deadline for this particular Gameweek has not passed. You can view the answers submitted by the player after the deadline passes.</b></h6>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

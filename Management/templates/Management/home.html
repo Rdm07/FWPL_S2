@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load material_form %}
+
+
+{% block title %}
+FWPL Home
+{% endblock %}
+
+{% block nav %}
+
+    <nav class="top-nav indigo darken-4">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a class="page-title" style="font-size: 30px;">
+                    FW PREDICTOR LEAGUE
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <a href="#" data-activates="slide-out"
+           class="button-collapse top-nav full hide-on-large-only">
+            <i class="material-icons">menu</i>
+        </a>
+    </div>
+
+    <ul class="side-nav fixed" id="slide-out">
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><div class="divider"></div></li>
+        <li><a href="{% url 'matchdays' m_count %}">Gameweeks</a></li>
+        <li><a href="{% url 'matchdayperformance' m_count %}">Gameweek Performance</a></li>
+        <li><a href="{% url 'leaguetable' %}">League Table</a></li>
+        <li><div class="divider"></div></li>
+        <li><a href="{% url 'logout' %}">Sign Out</a></li>
+    </ul>
+
+{% endblock %}
+
+{% block main %}
+
+
+<div class="row">
+    <div class="col sl6 m12">
+        <div class="card">
+            <div class="card-content">
+                <h5>Welcome {{user.first_name}} {{user.last_name}}</h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col sl6 m12">
+        <div class="card">
+            <div class="card-content">
+                <h6><b>Rules and Instructions:</b></h6>
+                <h6>For each gameweek of UEFA Champions League, you will be asked 10 questions. Each question can be answered by using the given multiple choice options or entering a text or numeric answer (Text answer will be the name of a palyer or a team)</h6>
+                <h6>While entering the text answer, enter the full name of a team or player (Paris Saint-Germain not PSG) (No need to add F.C.). The answerkey will be entered using data from <a href="https://www.whoscored.com">whoscored.com</a></h6>
+                <h6>Enter the answers using English Characters only.</h6>
+                <h6>Each correct answer will be given 1 pt and not pts will be deducted for incorrect answers. You can select at the most 1 answer to be a bonus answer. The bonus answer will fetch you 2 pts if correct, but get 2 pts deducted if incorrect</h6>
+                <h6>Each gameweek may or may not have a compulsion on submitting a bonus answer. Check the top of the gameweek page to verify. However if for bonus-compulsory gameweek, you fail to submit a bonus answer, 2 pts will be deducted for the week.</h6>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
+

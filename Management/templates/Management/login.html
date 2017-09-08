@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load material_form %}
+
+{% block title %}
+FWPL Login
+{% endblock %}
+
+{% block main %}
+
+<div class="row">
+    <div class="col 6 offset-m2 m6" style="margin-top: 10%;">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title black-text">FWPL Sign In</span>
+                <form method="POST" accept-charset="utf-8"
+                      class="viewform">
+                    {% csrf_token %}
+                    {% form %}
+                        {% part form.username prefix %}
+                            <i class="material-icons prefix">account_box</i>
+                        {% endpart %}
+                        {% part form.password prefix %}
+                            <i class="material-icons prefix">lock_open</i>
+                        {% endpart %}
+                    {% endform %}
+                    <div class="right-align">
+                           <button type="submit" name="_Login"
+                                   class="waves-effect waves-light btn btn-primary btn-lg grey darken-3">Sign In
+                                   <i class="material-icons right">done</i>
+                                   </button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="right-align card-action" >
+                <a href="{% url 'register' %}" type="submit" name="_Register"
+                    class="waves-effect waves-light btn btn-primary btn-lg grey darken-3">Sign Up
+                    <i class="material-icons right">mode_edit</i>
+                </a>
+            </div>
+
+           <!--  <div class="right-align card-action" >
+                <a href="{% url 'social:begin' 'facebook' %}" type="submit" name="_RegisterFB"
+                    class="waves-effect waves-light btn social facebook"><i class="fa fa-facebook left"></i> Sign in with facebook</a>
+            </div> -->
+            
+        </div>
+    </div>
+</div>
+
+{% endblock %}
